@@ -32,24 +32,40 @@ cases <- matrix(0, ncounties, ndays )
 deaths <- matrix(0, ncounties, ndays )
 
 # loop over all rows in nytimes dataset
+
+##
+## try not to use "row" as a variable because "row" is also a function
 for (row in 1:nrow(dat)) {
   # isolate the state, county, case count and death count from NYT dataset, dat
-  st <- dat$state[row]
+  st <- tolower( dat$state[row] )
   # error: st only contains one state... 
-  co <- dat$county[row]
+  co <- tolower( dat$county[row] )
+  day <- dat$date[row]
+  
   case_ct <- dat$cases[row]
   death_ct <- dat$deaths[row]
+  
+  ## this is good up until here (I've moved the day assignment up)
+  
+  ## next step is to figure out which row of "cases" this county is
+  j1 <- which( st_co$state == st & st_co$county == co )
+  
+  ## you fill in the blank here
+  ## to figure out which column of "cases" this day is
+  j2 <- ???
+      
+  ## then put the value in cases and deaths
+  cases[j1,j2] <- case_ct
+  deaths[j1,j2] <- death_ct
+  
   # vector of what a reshaped row would contain 
-  st_co_cases_deaths <- c(st,co,case_ct,death_ct)
+  #st_co_cases_deaths <- c(st,co,case_ct,death_ct)
   
   # want to insert case and death counts in consecutive columns of same row - iterate thru days
-  day <- dat$date[row]
-  for (i in (1:day)) {
-    cases[i,] <- st_co_cases_deaths[3]
-    deaths[i,] <- st_co_cases_deaths[4]
-  }
-
-
+  #for (i in (1:day)) {
+  #  cases[i,] <- st_co_cases_deaths[3]
+  #  deaths[i,] <- st_co_cases_deaths[4]
+  #}
 }
 # for each row, figure out which row and column
 # we should put the data in 'cases' and 'deaths'
