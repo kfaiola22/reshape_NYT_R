@@ -59,11 +59,32 @@ for (ro in 1:nrow(dat)) {
 # modify the matrices 
 
 # do some spot checking for accuracy
+  # texas bexar 2020-02-14 cases: 2, deaths: 0
+    ## cases[2502,25]
+    ## deaths[2502,25]
+
+  # wyoming park 2020-04-01 cases: 1, deaths: 0
+    ## cases[3064,72]
+    ## deaths[3064,72]
+
+  # suffolk massachusetts 2020-03-24 cases:234 deaths:2
+    ## cases[1194,64] 
+    ## deaths[1194,64]
+
+  # suffolk massachusetts 2020-03-25 cases: 342 deaths: 2
+    ## cases[1194,65] 
+    ## deaths[1194,65]
+
+  # suffolk new york 2020-03-24 cases:1880 deaths:13
+    ## cases[1844,64] 
+    ## deaths[1844,64]
+
+  # suffolk new york 2020-03-25 cases:2260 deaths:20
+    ## cases[1844,65]
+    ## deaths[1844,65]
 
 
-
-# save as csv or .RData file
-# write.csv
+# save as RData file
 
 save( st_co, all_dates, cases, deaths, file = "reshaped_nytimes_data.RData")
 
