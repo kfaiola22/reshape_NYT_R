@@ -1,6 +1,8 @@
 
 # read in the data
-dat <- read.csv("us-counties.csv",as.is=TRUE)
+nyt_url <- paste0("https://raw.githubusercontent.com/nytimes/",
+                  "covid-19-data/master/us-counties.csv")
+dat <- read.csv(nyt_url,as.is=TRUE)
 
 # main idea: create a matrix that has one row 
 # for each county, one column for each dat
