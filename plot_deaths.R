@@ -6,7 +6,7 @@ source("reshape_nytimes_data.R")
 load("reshaped_nytimes_data.RData")
 
 county_map <- ggplot2::map_data("county")
-
+state_map <- ggplot2::map_data("state")
 library("ggplot2")
 
 county_map$cases <- NA
@@ -33,16 +33,21 @@ for(j in 1:4){
         aes( x = long, y = lat, group = group, fill = log(cases)), 
         color = NA
     )
+    p5 <- scale_fill_gradient(low = "yellow", high = "red")
     p3 <- coord_map(projection = "mercator") 
     p4 <- theme_void()
+    p7 <- ggtitle("Confirmed Coronavirus Cases by County")
+    p8 <- labs(caption = "Data Source:The New York Times, based on reports from state and local health agencies")
+    p6 <- geom_polygon(
+        data = state_map,
+        aes( x = long, y = lat, group = group),
+        color = "black"
+    )
     fname <- paste0( "testplot", j, ".png" )
     png(fname,width=800,height=600)
-    print(p1 + p2 + p3 + p4)
+    print(p1 + p6 + p2 + p5 + p3 + p4 + p7 + p8)
     dev.off()
 }
-
-# after_stat()
-#scale_fill_brewer(cases, palette = "YlOrRd")
 
 # from website on election visual:
 # ggplot()+
