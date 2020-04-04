@@ -24,8 +24,6 @@ for( j in 1:nrow(st_co) ){
 # transformations (log, etc.)
 # write a loop to make a bunch of plots, one for each day
 
-# trial aesthetics:
-# library("hrbrthemes")
 for(j in 1:4){
     p1 <- ggplot() 
     p2 <- geom_polygon( 
@@ -40,9 +38,10 @@ for(j in 1:4){
     p8 <- labs(caption = "Data Source:The New York Times, based on reports from state and local health agencies")
     p6 <- geom_polygon(
         data = state_map,
-        aes(x = long, y = lat, group = group, alpha = 0.8),
+        aes(x = long, y = lat, group = group),
         color = "black",
-        fill = "white"
+        fill = "white",
+        alpha = 0
     )
     fname <- paste0( "testplot", j, ".png" )
     png(fname,width=800,height=600)
