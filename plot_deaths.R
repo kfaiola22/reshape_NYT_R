@@ -23,14 +23,17 @@ for( j in 1:nrow(st_co) ){
 # play around with colors, projections,
 # transformations (log, etc.)
 # write a loop to make a bunch of plots, one for each day
+
+# trial aesthetics:
+# library("hrbrthemes")
 for(j in 1:4){
     p1 <- ggplot() 
     p2 <- geom_polygon( 
-        data = county_map, 
-        aes( x = long, y = lat, group = group, fill = sqrt(cases) ), 
+        data = county_map,
+        aes( x = long, y = lat, group = group, fill = log(cases)), 
         color = NA
     )
-    p3 <- coord_map(projection = "mollweide") 
+    p3 <- coord_map(projection = "mercator") 
     p4 <- theme_void()
     fname <- paste0( "testplot", j, ".png" )
     png(fname,width=800,height=600)
@@ -38,3 +41,14 @@ for(j in 1:4){
     dev.off()
 }
 
+# after_stat()
+#scale_fill_brewer(cases, palette = "YlOrRd")
+
+# from website on election visual:
+# ggplot()+
+# geom_polygon(county_map, aes(long, lat, group = group)) +
+# geom_polygon(aes(fill = log(cases)),colour = alpha("white", 1/2), size = 0.05)  +
+# geom_polygon(data = state_df, colour = "white", fill = NA) +
+#     ggtitle("2012 US Election") +
+#     scale_fill_gradientn(colours=c(blue,"white", red))  +
+#     theme_void()
