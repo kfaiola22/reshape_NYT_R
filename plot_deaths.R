@@ -40,20 +40,12 @@ for(j in 1:4){
     p8 <- labs(caption = "Data Source:The New York Times, based on reports from state and local health agencies")
     p6 <- geom_polygon(
         data = state_map,
-        aes( x = long, y = lat, group = group),
-        color = "black"
+        aes(x = long, y = lat, group = group, alpha = 0.8),
+        color = "black",
+        fill = "white"
     )
     fname <- paste0( "testplot", j, ".png" )
     png(fname,width=800,height=600)
-    print(p1 + p6 + p2 + p5 + p3 + p4 + p7 + p8)
+    print(p1 + p2 + p5 + p6 + p3 + p4 + p7 + p8)
     dev.off()
 }
-
-# from website on election visual:
-# ggplot()+
-# geom_polygon(county_map, aes(long, lat, group = group)) +
-# geom_polygon(aes(fill = log(cases)),colour = alpha("white", 1/2), size = 0.05)  +
-# geom_polygon(data = state_df, colour = "white", fill = NA) +
-#     ggtitle("2012 US Election") +
-#     scale_fill_gradientn(colours=c(blue,"white", red))  +
-#     theme_void()
