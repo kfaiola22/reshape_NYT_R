@@ -24,15 +24,25 @@ for( j in 1:nrow(st_co) ){
 # transformations (log, etc.)
 # write a loop to make a bunch of plots, one for each day
 
-for(j in 1:4){
+for(j in (ncol(cases)-3):ncol(cases)){
+    county_map$cases <- NA
+    county_map$deaths <- NA
+    for( k in 1:nrow(st_co) ){
+        i1 <- county_map$region == st_co$state[k]
+        i2 <- county_map$subregion == st_co$county[k]
+        inds <- i1 & i2
+        county_map$cases[inds] <- cases[k,j]
+        county_map$deaths[inds] <- deaths[k,j]
+    }
+
     p1 <- ggplot() 
     p2 <- geom_polygon( 
         data = county_map,
-        aes( x = long, y = lat, group = group, fill = log(cases)), 
-        color = NA
+        aes( x = long, y = lat, group = group, fill = cases), 
+        color = NA,
     )
-    p5 <- scale_fill_gradient(low = "yellow", high = "red")
-    p3 <- coord_map(projection = "mercator") 
+    p5 <- scale_fill_gradient(low = "yellow", high = "red", trans = "log10")
+    p3 <- coord_map(projection = "lambert", parameters=c(25,50)) 
     p4 <- theme_void()
     p7 <- ggtitle("Confirmed Coronavirus Cases by County")
     p8 <- labs(caption = "Data Source:The New York Times, based on reports from state and local health agencies")
