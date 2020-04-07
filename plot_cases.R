@@ -52,7 +52,7 @@ for(j in ((ncol(cases) - days_back):ncol(cases))){
         fill = "white",
         alpha = 0
     )
-    fname <- paste0( "plots/", region, j, ".png" )
+    fname <- paste0( "plots/", region, "CASES", j, ".png" )
     png(fname,width=800,height=600)
     print(p1 + p2 + p5 + p6 + p3 + p4 + p7 + p8)
     dev.off()
