@@ -1,1 +1,6 @@
-"maine, vermont, new hampshire, Massachusetts, connecticut, rhode island"
+maine
+vermont
+new hampshire
+massachusetts
+connecticut
+rhode island

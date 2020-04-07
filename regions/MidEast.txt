@@ -1,1 +1,5 @@
-"ohio, new jersey, pennsylvania, maryland, delaware"
+ohio
+new jersey
+pennsylvania
+maryland
+delaware

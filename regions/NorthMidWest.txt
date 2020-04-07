@@ -1,1 +1,3 @@
-'montana, wyoming, idaho"
+montana
+wyoming 
+idaho

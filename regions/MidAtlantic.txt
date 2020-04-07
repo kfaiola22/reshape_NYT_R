@@ -1,1 +1,5 @@
-"west virginia, tennessee, kentucky, virginia, north carolina"
+west virginia
+tennessee
+kentucky
+virginia
+north carolina

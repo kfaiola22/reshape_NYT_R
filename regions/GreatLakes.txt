@@ -1,1 +1,4 @@
-"michigan, wisconsin, illinois, indiana"
+michigan
+wisconsin
+illinois
+indiana

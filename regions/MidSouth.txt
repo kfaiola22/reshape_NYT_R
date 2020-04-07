@@ -1,1 +1,4 @@
-"texas, oklahoma, arkansas, louisiana"
+texas
+oklahoma
+arkansas
+louisiana

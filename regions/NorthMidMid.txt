@@ -1,1 +1,6 @@
-"north dakota, South Dakota, minnesota, iowa, nebraska"
+north
+dakota
+south dakota
+minnesota
+iowa
+nebraska

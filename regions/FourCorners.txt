@@ -1,1 +1,4 @@
-"colorado, Arizona, new mexico, utah"
+colorado
+arizona
+new mexico
+utah
