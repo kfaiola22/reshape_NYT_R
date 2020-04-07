@@ -1,1 +1,5 @@
-"south carolina, alabama, mississippi, georgia, florida"
+south carolina
+alabama
+mississippi
+georgia
+florida

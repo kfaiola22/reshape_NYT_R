@@ -1,7 +1,12 @@
 
 args <- commandArgs(trailingOnly = TRUE)
+
+# manually define args while testing
+args <- c("DeepSouth","5")
+
+# define variables from args
 region <- args[1]
-days_back <- args[2]
+days_back <- as.numeric(args[2])
 
 # plot the nytimes data
 source("reshape_nytimes_data.R")
@@ -9,24 +14,14 @@ source("reshape_nytimes_data.R")
 # read in the matrix of cases and deaths
 load("reshaped_nytimes_data.RData")
 
-library("ggplot2")
-county_map <- map_data("county")
-state_map <- map_data("state")
+# this we'll have to read in from a text file
+fname <- paste0("regions/",region,".txt")
+states <- read.csv(fname, header=FALSE,as.is=TRUE)[,1]
 
-# county_map$cases <- NA
-# county_map$deaths <- NA
-# for( j in 1:nrow(st_co) ){
-#     i1 <- county_map$region == st_co$state[j]
-#     i2 <- county_map$subregion == st_co$county[j]
-#     inds <- i1 & i2
-#     county_map$cases[inds] <- cases[j,ncol(cases)]
-#     county_map$deaths[inds] <- deaths[j,ncol(deaths)]
-# }
+library("ggplot2")
+county_map <- map_data("county", region = states)
+state_map <- map_data("state", region = states)
     
-    
-# play around with colors, projections,
-# transformations (log, etc.)
-# write a loop to make a bunch of plots, one for each day
 
 for(j in ((ncol(cases) - days_back):ncol(cases))){
     county_map$cases <- NA
@@ -43,9 +38,9 @@ for(j in ((ncol(cases) - days_back):ncol(cases))){
     p2 <- geom_polygon( 
         data = county_map,
         aes( x = long, y = lat, group = group, fill = cases), 
-        color = NA,
+        color = NA
     )
-    p5 <- scale_fill_gradient(low = "yellow", high = "red", trans = "log10", limits = c(0, 15,000))
+    p5 <- scale_fill_gradient(low = "yellow", high = "red", trans = "log10", limits = c(1,100000))
     p3 <- coord_map(projection = "lambert", parameters=c(25,50)) 
     p4 <- theme_void()
     p7 <- ggtitle("Confirmed Coronavirus Cases by County")
@@ -57,7 +52,7 @@ for(j in ((ncol(cases) - days_back):ncol(cases))){
         fill = "white",
         alpha = 0
     )
-    fname <- paste0( "testplot", j, ".png" )
+    fname <- paste0( "plots/", region, j, ".png" )
     png(fname,width=800,height=600)
     print(p1 + p2 + p5 + p6 + p3 + p4 + p7 + p8)
     dev.off()
