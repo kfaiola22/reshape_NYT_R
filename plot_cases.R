@@ -1,30 +1,34 @@
 
+args <- commandArgs(trailingOnly = TRUE)
+region <- args[1]
+days_back <- args[2]
+
 # plot the nytimes data
 source("reshape_nytimes_data.R")
 
 # read in the matrix of cases and deaths
 load("reshaped_nytimes_data.RData")
 
-county_map <- ggplot2::map_data("county")
-state_map <- ggplot2::map_data("state")
 library("ggplot2")
+county_map <- map_data("county")
+state_map <- map_data("state")
 
-county_map$cases <- NA
-county_map$deaths <- NA
-for( j in 1:nrow(st_co) ){
-    i1 <- county_map$region == st_co$state[j]
-    i2 <- county_map$subregion == st_co$county[j]
-    inds <- i1 & i2
-    county_map$cases[inds] <- cases[j,ncol(cases)]
-    county_map$deaths[inds] <- deaths[j,ncol(deaths)]
-}
+# county_map$cases <- NA
+# county_map$deaths <- NA
+# for( j in 1:nrow(st_co) ){
+#     i1 <- county_map$region == st_co$state[j]
+#     i2 <- county_map$subregion == st_co$county[j]
+#     inds <- i1 & i2
+#     county_map$cases[inds] <- cases[j,ncol(cases)]
+#     county_map$deaths[inds] <- deaths[j,ncol(deaths)]
+# }
     
     
 # play around with colors, projections,
 # transformations (log, etc.)
 # write a loop to make a bunch of plots, one for each day
 
-for(j in (ncol(cases)-3):ncol(cases)){
+for(j in ((ncol(cases) - days_back):ncol(cases))){
     county_map$cases <- NA
     county_map$deaths <- NA
     for( k in 1:nrow(st_co) ){
@@ -41,7 +45,7 @@ for(j in (ncol(cases)-3):ncol(cases)){
         aes( x = long, y = lat, group = group, fill = cases), 
         color = NA,
     )
-    p5 <- scale_fill_gradient(low = "yellow", high = "red", trans = "log10")
+    p5 <- scale_fill_gradient(low = "yellow", high = "red", trans = "log10", limits = c(0, 15,000))
     p3 <- coord_map(projection = "lambert", parameters=c(25,50)) 
     p4 <- theme_void()
     p7 <- ggtitle("Confirmed Coronavirus Cases by County")
