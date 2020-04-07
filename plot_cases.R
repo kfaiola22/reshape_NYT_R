@@ -2,7 +2,7 @@
 args <- commandArgs(trailingOnly = TRUE)
 
 # manually define args while testing
-# args <- c("DeepSouth","5")
+args <- c("DeepSouth","5")
 
 # define variables from args
 region <- args[1]
@@ -40,11 +40,9 @@ for(j in ((ncol(cases) - days_back):ncol(cases))){
         aes( x = long, y = lat, group = group, fill = cases), 
         color = NA
     )
-    p5 <- scale_fill_gradient(low = "yellow", high = "red", trans = "log10", limits = c(1,100000))
     p3 <- coord_map(projection = "lambert", parameters=c(25,50)) 
     p4 <- theme_void()
-    p7 <- ggtitle("Confirmed Coronavirus Cases by County")
-    p8 <- labs(caption = "Data Source:The New York Times, based on reports from state and local health agencies")
+    p5 <- scale_fill_gradient(low = "yellow", high = "red", trans = "log10", limits = c(1,100000))
     p6 <- geom_polygon(
         data = state_map,
         aes(x = long, y = lat, group = group),
@@ -52,8 +50,12 @@ for(j in ((ncol(cases) - days_back):ncol(cases))){
         fill = "white",
         alpha = 0
     )
+    p7 <- labs(title = "Confirmed Coronavirus Cases by County")
+    p8 <- labs(subtitle = paste(paste(states[1:5], sep = ", "), all_dates[j], sep = ", "))
+    p9 <- labs(caption = "Data Source:The New York Times, based on reports from state and local health agencies")
+    p10 <- theme( plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0, face = "italic"))
     fname <- paste0( "plots/", region, "CASES", j, ".png" )
     png(fname,width=800,height=600)
-    print(p1 + p2 + p5 + p6 + p3 + p4 + p7 + p8)
+    print(p1 + p2 + p5 + p6 + p3 + p4 + p7 + p8 + p9 + p10 ) 
     dev.off()
 }
