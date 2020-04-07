@@ -1,0 +1,3 @@
+Rscript plot_deaths.R northwest
+Rscript plot_deaths.R northeast
+
