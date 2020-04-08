@@ -40,11 +40,9 @@ for(j in ((ncol(cases) - days_back):ncol(cases))){
         aes( x = long, y = lat, group = group, fill = deaths), 
         color = NA
     )
-    p5 <- scale_fill_gradient(low = "yellow", high = "red", trans = "log10", limits = c(1,100000))
     p3 <- coord_map(projection = "lambert", parameters=c(25,50)) 
     p4 <- theme_void()
-    p7 <- ggtitle("Confirmed Coronavirus Cases by County")
-    p8 <- labs(caption = "Data Source:The New York Times, based on reports from state and local health agencies")
+    p5 <- scale_fill_gradient(low = "yellow", high = "red", trans = "log10", limits = c(1,100000))
     p6 <- geom_polygon(
         data = state_map,
         aes(x = long, y = lat, group = group),
@@ -52,8 +50,12 @@ for(j in ((ncol(cases) - days_back):ncol(cases))){
         fill = "white",
         alpha = 0
     )
+    p7 <- ggtitle("Confirmed Coronavirus Deaths by County")
+    p8 <- labs(subtitle = paste(paste(stringi::stri_sort(states), collapse = ", "),all_dates[1], sep = ", "))
+    p9 <- labs(caption = "Data Source:The New York Times, based on reports from state and local health agencies")
+    p10 <- theme( plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.5, face = "italic"))
     fname <- paste0( "plots/", region, "DEATHS", j, ".png" )
     png(fname,width=800,height=600)
-    print(p1 + p2 + p5 + p6 + p3 + p4 + p7 + p8)
+    print(p1 + p2 + p5 + p6 + p3 + p4 + p7 + p8 + p9 + p10 )
     dev.off()
 }

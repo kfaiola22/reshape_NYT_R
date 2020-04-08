@@ -51,9 +51,9 @@ for(j in ((ncol(cases) - days_back):ncol(cases))){
         alpha = 0
     )
     p7 <- labs(title = "Confirmed Coronavirus Cases by County")
-    p8 <- labs(subtitle = paste(paste(states[1:5], sep = ", "), all_dates[j], sep = ", "))
+    p8 <- labs(subtitle = paste(paste(stringi::stri_sort(states), collapse = ", "),all_dates[1], sep = ", "))
     p9 <- labs(caption = "Data Source:The New York Times, based on reports from state and local health agencies")
-    p10 <- theme( plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0, face = "italic"))
+    p10 <- theme( plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.5, face = "italic"))
     fname <- paste0( "plots/", region, "CASES", j, ".png" )
     png(fname,width=800,height=600)
     print(p1 + p2 + p5 + p6 + p3 + p4 + p7 + p8 + p9 + p10 ) 
