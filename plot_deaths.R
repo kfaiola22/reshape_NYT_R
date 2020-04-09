@@ -2,7 +2,7 @@
 args <- commandArgs(trailingOnly = TRUE)
 
 # manually define args while testing 
-args <- c("DeepSouth","5")
+# args <- c("DeepSouth","5")
 
 # define variables from args
 region <- args[1]
