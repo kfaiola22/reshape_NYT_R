@@ -1,5 +1,4 @@
-north
-dakota
+north dakota
 south dakota
 minnesota
 iowa
