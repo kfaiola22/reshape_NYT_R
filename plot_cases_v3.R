@@ -1,74 +1,81 @@
 
 # plot the nytimes data
-#source("reshape_nytimes_data.R")
+# source("reshape_nytimes_data.R")
 
 args <- commandArgs(trailingOnly = TRUE)
 
 # manually define args while testing
 # args <- c("AllStates","30")
+library("ggplot2")
+library("tidycensus")
+library("sf")
 
 # define variables from args
-days_back <- as.numeric(args[1])
-file_stem <- args[2]
-states <- args[3:length(args)]
+days_back <- 40
+stem <- args[5]
+#states <- args[3:length(args)]
 
 
 # read in the matrix of cases and deaths
-load("reshaped_nytimes_data.RData")
+load("reshaped_nytimes_data_v2.RData")
 
-# this we'll have to read in from a text file
-#fname <- paste0("regions/",region,".txt")
-#states <- read.csv(fname, header=FALSE,as.is=TRUE)[,1]
+# read in county_pop and state_map
+load("stco_maps.RData")
 
-library("ggplot2")
-county_map <- map_data("county", region = states)
-state_map <- map_data("state", region = states)
+# grab counties inside of bounding box
+bbox <- as.numeric(args[1:4])
 
-# loads in object county_demog
-load("county_demog.RData")
+check_inside <- function( r ){
+    xy <- st_coordinates(r)
+    m <- max( sp::point.in.polygon(xy[,1],xy[,2],
+        bbox[c(1,2,2,1)],bbox[c(3,3,4,4)] ) )
+    return(m==1)
+}
+is_inside <- rep(NA,nrow(county_pop))
+for(j in 1:nrow(county_pop)){
+    is_inside[j] <- check_inside(county_pop[j,])
+}
+county_pop0 <- county_pop[is_inside,]
+cases0 <- cases[is_inside,]
+deaths0 <- deaths[is_inside,]
+
+# smooth the cases over time
+smoother <- function(x){
+    y <- x
+    n <- length(x)
+    y[1] <- mean(x[1:2])
+    y[2] <- 0.25*x[1]+0.5*x[2]+0.25*x[3]
+    for(j in 3:(n-2)){
+        y[j] <- 0.1*(x[j-2]+x[j+2]) + 0.2*(x[j-1]+x[j+1]) + 0.4*x[j]
+    }
+    y[n-1] <- 0.25*x[n-2]+0.5*x[n-1]+0.25*x[n]
+    y[length(x)] <- mean(x[c(n-1,n)])
+    return(y)
+}
+cases1 <- t(apply(cases0,1,smoother))
+
+
 
 for(j in ((ncol(cases) - days_back):ncol(cases))){
-    county_map$cases <- NA
-    county_map$deaths <- NA
-    for( k in 1:nrow(st_co) ){
-        i1 <- county_map$region == st_co$state[k]
-        i2 <- county_map$subregion == st_co$county[k]
-        inds <- i1 & i2
-        # get inds from demographic table
-        j1 <- county_demog$state == st_co$state[k]
-        # get map inds
-        j2 <- county_demog$county == st_co$county[k]
-        jj <- which( j1 & j2 )
-        per_num <- 1e5
-        if( length(jj) != 0 ){
-            pop <- county_demog$pop[jj]        
-            county_map$cases[inds] <- ceiling(per_num*cases[k,j]/pop)        
-            county_map$deaths[inds] <- ceiling(per_num*deaths[k,j]/pop)
-        }
-    }
 
-    p1 <- ggplot() 
-    p2 <- geom_polygon( 
-        data = county_map,
-        aes( x = long, y = lat, group = group, fill = cases), 
-        color = NA
-    )
-    p3 <- coord_map(projection = "lambert", parameters=c(25,50)) 
+    county_pop0$cases <- pmax(0,(cases1[,j]-cases1[,j-1]))/county_pop0$estimate*1e5
+    county_pop0$deaths <- deaths0[,j]/county_pop0$estimate*1e5
+    print(max(county_pop0$cases))
+    t1 <- proc.time()
+    p1 <- ggplot()
+    p2a <- geom_sf(data = county_pop0, color = NA, mapping=aes(fill = cases) )
+    p2b <- geom_sf(data = state_map, fill = NA, color = rgb(0.4,0.4,0.4) )
+    p3 <- coord_sf(xlim = bbox[1:2], ylim = bbox[3:4], expand = FALSE )
     p4 <- theme_void()
-    p5 <- scale_fill_viridis_c(limits = c(1,2500))
-    p6 <- geom_polygon(
-        data = state_map,
-        aes(x = long, y = lat, group = group),
-        color = "black",
-        fill = "white",
-        alpha = 0
-    )
-    p7 <- labs(title = "Confirmed Coronavirus Cases by County")
+    p5 <- scale_fill_viridis_c(trans = "sqrt", limits = c(0,300))
+    p7 <- labs(title = "COVID cases per 100k people each day")
     p8 <- labs(subtitle = format(all_dates[j], "%b. %d, %Y"))
     p9 <- labs(caption = "Data Source:The New York Times, based on reports from state and local health agencies")
     p10 <- theme( plot.title = element_text(hjust = 0.5, face = "bold"), plot.subtitle = element_text(hjust = 0.5), plot.caption = element_text(hjust = 0.5, face = "italic"))
-    fname <- paste0( "plots/", file_stem, "CASES", j, ".png" )
-    png(fname,width=800,height=600)
-    print(p1 + p2 + p5 + p6 + p3 + p4 + p7 + p8 + p9 + p10 ) 
+    fname <- paste0( "plots/", stem, "CASES", j, ".png" )
+    png(fname,width=600,height=600)
+    print(p1+p2a+p2b+p3+p4+p5+p7+p8+p9+p10)
     dev.off()
+
+    
 }
