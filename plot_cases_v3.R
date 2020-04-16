@@ -74,7 +74,9 @@ for(j in ((ncol(cases) - days_back):ncol(cases))){
     p10 <- theme( plot.title = element_text(hjust = 0.5,face = "bold"), 
         plot.subtitle = element_text(hjust = 0.5), 
         plot.caption = element_text(hjust = 0.5, face = "italic"),
-        plot.margin = unit(c(2,2,2,2), "cm"))
+        plot.margin = unit(c(2,2,2,2), "cm"),
+        legend.title = element_blank(),
+        legend.text = element_text(size =12))
     fname <- paste0( "plots/", stem, "CASES", j, ".png" )
     png(fname,width=600,height=600)
     print(p1+p2a+p2b+p3+p4+p5+p7+p8+p9+p10)
