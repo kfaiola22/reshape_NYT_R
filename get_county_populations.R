@@ -1,5 +1,5 @@
 
-# census_api_key(<your key here>, install = TRUE)
+tidycensus::census_api_key('<your api key>', install = TRUE, overwrite = TRUE)
 
 # create table of county demographics
 options(tigris_use_cache = TRUE)
