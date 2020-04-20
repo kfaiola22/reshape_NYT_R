@@ -11,10 +11,10 @@ county_pop <- tidycensus::get_acs(
     geography = "county",
     variables = "B01003_001", 
     geometry = TRUE,
-    resolution = "20m"
+    resolution = "5m"
 )
 #county_pop <- sf::st_transform(county_pop, crs = 2163 )
-state_map <- tigris::states( cb = TRUE, resolution = "20m", class = "sf" )
+state_map <- tigris::states( cb = TRUE, resolution = "5m", class = "sf" )
 
 save( county_pop, state_map, file = "stco_maps.RData" )
 
