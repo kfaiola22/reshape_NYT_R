@@ -7,7 +7,7 @@ do
   Rscript plot_cases_v3.R $line
   for J in {1..40}
   do
-    cp "plots/"$code"CASES86.png" "plots/"$code"CASES999"$J".png"
+    cp "plots/"$code"CASES89.png" "plots/"$code"CASES999"$J".png"
   done
   convert -delay 30 -loop 0 "plots/"$code"*.png" "plots/"$code".gif"
   #echo $code
