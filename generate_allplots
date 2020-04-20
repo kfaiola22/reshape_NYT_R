@@ -1,8 +1,10 @@
 input="coordinates.txt"
+Rscript get_county_populations.R
+Rscript reshape_nytimes_data_v2.R
 while IFS= read -r line
 do
   code=$(echo $line | awk '{print $NF}')
-  #Rscript plot_cases_v3.R $line
+  Rscript plot_cases_v3.R $line
   for J in {1..40}
   do
     cp "plots/"$code"CASES86.png" "plots/"$code"CASES999"$J".png"
