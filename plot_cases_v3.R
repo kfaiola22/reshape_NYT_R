@@ -93,7 +93,7 @@ for(j in ((ncol(cases) - days_back):(ncol(cases)-1))){
         legend.position = "bottom",
         legend.key.width = unit(0.1,"npc"), 
         legend.key.height = unit(0.02,"npc") )
-    fname <- paste0( "plots/", stem, "CASES", j, ".png" )
+    fname <- paste0( "plots/", stem, "CASES", sprintf("%03d",j), ".png" )
     png(fname,width=600,height=600)
     print(p1+p2a+p2b+p3+p4+p5+p7+p8+p9+p10)
     dev.off()
