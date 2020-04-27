@@ -6,7 +6,7 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 
 # manually define args while testing
-args <- c("-125","-65","25","50","all")
+# args <- c("-125","-65","25","50","all")
 library("ggplot2")
 library("tidycensus")
 library("sf")
