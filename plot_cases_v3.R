@@ -6,7 +6,7 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 
 # manually define args while testing
-# args <- c("-125","-65","25","50","all")
+args <- c("-125","-65","25","50","all")
 library("ggplot2")
 library("tidycensus")
 library("sf")
@@ -83,7 +83,7 @@ for(j in ((ncol(cases) - days_back):(ncol(cases)-1))){
     p5 <- scale_fill_viridis_c(trans = "sqrt", limits = c(0,300))
     p7 <- labs(title = "COVID cases per 100k people per day")
     p8 <- labs(subtitle = format(all_dates[j], "%b. %d, %Y"))
-    p9 <- labs(caption = "Data Source:The New York Times, based on reports from state and local health agencies")
+    p9 <- labs(caption = "Data Source: The New York Times, based on reports from state and local health agencies")
     p10 <- theme( plot.title = element_text(hjust = 0.5,face = "bold"), 
         plot.subtitle = element_text(hjust = 0.5), 
         plot.caption = element_text(hjust = 0.5, face = "italic"),

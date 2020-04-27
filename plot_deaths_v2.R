@@ -6,7 +6,7 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 
 # manually define args while testing
-# args <- c("-125","-65","25","50","all")
+args <- c("-125","-65","25","50","all")
 library("ggplot2")
 library("tidycensus")
 library("sf")
@@ -55,6 +55,7 @@ smoother <- function(x){
   return(y)
 }
 cases1 <- t(apply(cases0,1,smoother))
+deaths1 <- t(apply(deaths0,1,smoother))
 
 # do the map projection calculations
 target_crs <- '+proj=moll'
@@ -71,10 +72,11 @@ for(j in ((ncol(cases) - days_back):(ncol(cases)-1))){
   
   county_pop_trans$cases <- pmax(0,(cases1[,j]-cases1[,j-1]))/county_pop0$estimate*1e5
   county_pop0$deaths <- deaths0[,j]/county_pop0$estimate*1e5
-  print(max(county_pop_trans$cases))
+  county_pop_trans$deaths <- pmax(0, (deaths1[,j]-deaths1[,j-1]))/county_pop$estimate*1e5
+  print(max(county_pop_trans$deaths))
   t1 <- proc.time()
   p1 <- ggplot()
-  p2a <- geom_sf(data = county_pop0, color = NA, mapping=aes(fill = deaths) )
+  p2a <- geom_sf(data = county_pop_trans, color = NA, mapping=aes(fill = deaths) )
   p2b <- geom_sf(data = state_map, fill = NA, color = rgb(0.4,0.4,0.4) )
   p3 <- coord_sf(xlim = disp_win_coord[,'X'], ylim = disp_win_coord[,'Y'],
                  datum = target_crs, expand = FALSE)
@@ -83,7 +85,7 @@ for(j in ((ncol(cases) - days_back):(ncol(cases)-1))){
   p5 <- scale_fill_viridis_c(trans = "sqrt", limits = c(0,300))
   p7 <- labs(title = "COVID deaths per 100k people per day")
   p8 <- labs(subtitle = format(all_dates[j], "%b. %d, %Y"))
-  p9 <- labs(caption = "Data Source:The New York Times, based on reports from state and local health agencies")
+  p9 <- labs(caption = "Data Source: The New York Times, based on reports from state and local health agencies")
   p10 <- theme( plot.title = element_text(hjust = 0.5,face = "bold"), 
                 plot.subtitle = element_text(hjust = 0.5), 
                 plot.caption = element_text(hjust = 0.5, face = "italic"),
