@@ -1,0 +1,14 @@
+input="coordinates.txt"
+Rscript get_county_populations.R
+Rscript reshape_nytimes_data_v2.R
+while IFS= read -r line
+do
+  code=$(echo $line | awk '{print $NF}')
+  Rscript plot_deaths_v2.R $line
+  for J in {1..40}
+  do
+    cp "plots/"$code"DEATHS89.png" "plots/"$code"DEATHS999"$J".png"
+  done
+  convert -delay 30 -loop 0 "plots/"$code"*.png" "plots/"$code".gif"
+  #echo $code
+done < "$input"
