@@ -6,7 +6,7 @@ args <- commandArgs(trailingOnly = TRUE)
 print(args)
 
 # manually define args while testing
-args <- c("-125","-65","25","50","all")
+# args <- c("-125","-65","25","50","all")
 library("ggplot2")
 library("tidycensus")
 library("sf")
@@ -72,7 +72,7 @@ for(j in ((ncol(cases) - days_back):(ncol(cases)-1))){
   
   county_pop_trans$cases <- pmax(0,(cases1[,j]-cases1[,j-1]))/county_pop0$estimate*1e5
   county_pop0$deaths <- deaths0[,j]/county_pop0$estimate*1e5
-  county_pop_trans$deaths <- pmax(0, (deaths1[,j]-deaths1[,j-1]))/county_pop$estimate*1e5
+  county_pop_trans$deaths <- pmax(0, (deaths1[,j]-deaths1[,j-1]))/county_pop0$estimate*1e5
   print(max(county_pop_trans$deaths))
   t1 <- proc.time()
   p1 <- ggplot()
