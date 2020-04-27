@@ -82,7 +82,7 @@ for(j in ((ncol(cases) - days_back):(ncol(cases)-1))){
                  datum = target_crs, expand = FALSE)
   #p3 <- coord_sf(xlim = bbox[1:2], ylim = bbox[3:4], expand = FALSE )
   p4 <- theme_void()
-  p5 <- scale_fill_viridis_c(trans = "sqrt", limits = c(0,300))
+  p5 <- scale_fill_viridis_c(trans = "sqrt", limits = c(0,100))
   p7 <- labs(title = "COVID deaths per 100k people per day")
   p8 <- labs(subtitle = format(all_dates[j], "%b. %d, %Y"))
   p9 <- labs(caption = "Data Source: The New York Times, based on reports from state and local health agencies")
