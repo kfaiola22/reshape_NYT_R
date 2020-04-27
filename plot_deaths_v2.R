@@ -68,7 +68,7 @@ disp_win_trans <- st_transform(disp_win_wgs84, crs = target_crs)
 disp_win_coord <- st_coordinates(disp_win_trans)
 
 # loop over days, make the plots
-for(j in ((ncol(cases) - days_back):(ncol(cases)-1))){
+for(j in (ncol(cases) - days_back):ncol(cases) ){
   
   county_pop_trans$cases <- pmax(0,(cases1[,j]-cases1[,j-1]))/county_pop0$estimate*1e5
   county_pop0$deaths <- deaths0[,j]/county_pop0$estimate*1e5
