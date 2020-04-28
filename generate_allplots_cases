@@ -1,0 +1,25 @@
+input="coordinates.txt"
+last_file="096"
+Rscript get_county_populations.R
+Rscript reshape_nytimes_data_v2.R
+while IFS= read -r line
+do
+
+  code=$(echo $line | awk '{print $NF}')
+
+  rmfiles="plots/"$code"CASES*.png"
+  rm $rmfiles
+
+  Rscript plot_cases_v3.R $line
+  
+  for J in {1..40}
+  do
+    cp "plots/"$code"CASES"$last_file".png" "plots/"$code"CASES999"$J".png"
+  done
+
+  convert -delay 30 -loop 0 "plots/"$code"CASES*.png" "plots/"$code"CASES.gif"
+
+  rmfiles="plots/"$code"CASES*.png"
+  rm $rmfiles
+
+done < "$input"

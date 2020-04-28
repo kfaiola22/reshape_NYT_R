@@ -68,7 +68,7 @@ disp_win_trans <- st_transform(disp_win_wgs84, crs = target_crs)
 disp_win_coord <- st_coordinates(disp_win_trans)
 
 # loop over days, make the plots
-for(j in (ncol(cases) - days_back):ncol(cases) ){
+for(j in (ncol(cases) - days_back):(ncol(cases)-1) ){
   
   county_pop_trans$cases <- pmax(0,(cases1[,j]-cases1[,j-1]))/county_pop0$estimate*1e5
   county_pop0$deaths <- deaths0[,j]/county_pop0$estimate*1e5
@@ -82,7 +82,7 @@ for(j in (ncol(cases) - days_back):ncol(cases) ){
                  datum = target_crs, expand = FALSE)
   #p3 <- coord_sf(xlim = bbox[1:2], ylim = bbox[3:4], expand = FALSE )
   p4 <- theme_void()
-  p5 <- scale_fill_viridis_c(trans = "sqrt", limits = c(0,100))
+  p5 <- scale_fill_viridis_c(trans = "sqrt", limits = c(0,50))
   p7 <- labs(title = "COVID deaths per 100k people per day")
   p8 <- labs(subtitle = format(all_dates[j], "%b. %d, %Y"))
   p9 <- labs(caption = "Data Source: The New York Times, based on reports from state and local health agencies")

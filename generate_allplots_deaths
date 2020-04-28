@@ -1,21 +1,24 @@
 input="coordinates.txt"
+last_file="096"
 Rscript get_county_populations.R
 Rscript reshape_nytimes_data_v2.R
 while IFS= read -r line
 do
   code=$(echo $line | awk '{print $NF}')
 
-  rm "plots/"$code"DEATHS*.png"
+  rmfiles="plots/"$code"DEATHS*.png"
+  rm $rmfiles
 
   Rscript plot_deaths_v2.R $line
-
-  last_file=$(ls "plots/"$code"DEATHS*.png" | tail -n 1 )
-
+  
   for J in {1..40}
   do
-    cp $last_file "plots/"$code"DEATHS999"$J".png"
+    cp "plots/"$code"DEATHS"$last_file".png" "plots/"$code"DEATHS999"$J".png"
   done
 
-  convert -delay 30 -loop 0 "plots/"$code"*.png" "plots/"$code".gif"
+  convert -delay 30 -loop 0 "plots/"$code"*.png" "plots/"$code"DEATHS.gif"
+
+  rmfiles="plots/"$code"DEATHS*.png"
+  rm $rmfiles
 
 done < "$input"
